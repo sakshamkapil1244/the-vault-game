@@ -1,27 +1,38 @@
-# THE VAULT
+# 🏦 THE VAULT: Co-op Heist
 
-## Run the lobby
+A real-time multiplayer cooperative heist game for 2-4 players. Communication is key, as each player gets a unique perspective and role. Crack the vault within 3 minutes before the guards catch you!
 
-From this folder, run:
+## 🚀 Live Demo
+**Play it here:** [https://the-vault-game.onrender.com](https://the-vault-game.onrender.com)
+*(Note: The server may take up to 50 seconds to wake up on the first load due to Render's free tier. Once loaded, it runs smoothly.)*
 
-```sh
-node server.js
-```
+## ✨ Key Features
+- **Asymmetrical Roles:** Players are assigned distinct roles (Hacker, Muscle, Lookout) with unique screens and tasks.
+- **Real-time Sync:** Powered by Socket.io, ensuring every player's screen is perfectly synced.
+- **Multi-Level Heist:** 3 levels of increasing difficulty, with changing guard patterns and timers.
+- **Global Leaderboard:** Top 5 fastest successful heists are saved and displayed.
+- **In-Game Quick Chat:** Communicate instantly with "Clear!", "Wait!", or "Help!" even without voice chat.
+- **Immersive Audio:** Built with the Web Audio API for dynamic sound effects and a looping synthwave theme.
+- **Robust Edge Cases:** Handles player disconnections gracefully (pauses the timer for 30 seconds to allow reconnection).
+- **AI Bots:** Solo mode allows players to fill empty slots with AI companions for practice.
 
-Then open [http://localhost:4173](http://localhost:4173). The server uses only Node.js built-in modules; no package install is needed.
+## 🎮 How to Play
+1. **Create or Join a Room:** One player creates a room and shares the 4-letter code (e.g., `DVUL`).
+2. **Understand Your Role:**
+   - 👨‍💻 **HACKER:** Sees a scrambled 4-digit code. Must guide the Muscle on which buttons to press.
+   - 💪 **MUSCLE:** Controls the vault buttons. Must wait for the Lookout to say it's safe.
+   - 👁️ **LOOKOUT:** Watches the mini-map and guards. Warns the team of incoming danger.
+3. **Communicate:** Use voice chat or the in-game Quick Chat buttons. Teamwork is everything!
+4. **Win:** Crack the 3-level vault within the time limit to escape with the loot.
 
-To play with others on the same network, have everyone open the host computer's LAN address on port `4173`, then join with the six-character room code. Create a room and start with AI to practice solo. The room host can rotate roles before starting.
+## 🛠️ Tech Stack
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript (Canvas API)
+- **Backend:** Node.js, Express.js, Socket.io (WebSockets)
+- **Deployment:** Render
 
-## Heist flow
+## 💻 Run Locally
+If you want to run this project on your local machine:
 
-Clear the signal as Hacker, wait for the Lookout to call CLEAR, then breach as Muscle. Each level has its own timer and patrol pattern. Wrong or premature actions are recorded; a mistake during a guard window can trigger a guard sighting. The final report shows active time, wrong actions, and guard sightings.
-
-If a player disconnects during a live heist, the server pauses the mission timer for up to 30 seconds. Reopening the same browser session reconnects the player. Room and game state are held in server memory, so they reset when the Node process stops.
-
-## Crew tools and records
-
-The lobby's **Fastest Heists** board shows the five quickest successful crews across all three levels. Records are saved in `leaderboard.json`, so they survive a server restart. The first successful completion creates the file entry; solo practice runs can also set a record.
-
-During a live run, **Quick Comms** sends CLEAR, WAIT, and HELP callouts to every player in the room. The Hacker can trigger **System Overload** once per level to scramble all clients' displays and suppress patrol warnings briefly. The board is shared by rooms hosted by the same server process; use a shared database if you later deploy multiple server instances.
-
-Web Audio starts only after the first screen click to meet browser autoplay rules. That click starts the looping synth theme; every enabled button gives a short beep, and nearby guards trigger a repeating siren. The top-right sound button mutes and restores music and effects together, and remembers the setting in that browser.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sakshamkapil1244/the-vault-game.git
