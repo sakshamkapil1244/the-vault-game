@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080d12" />
+    <meta name="description" content="THE VAULT — a three-player co-op heist lobby." />
+    <title>THE VAULT — Crew Lobby</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient-grid" aria-hidden="true"></div>
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="glitch-overlay" id="glitchOverlay" aria-hidden="true"><div><span>INTRUSION COUNTERMEASURE // 04</span><b>SYSTEM OVERLOAD</b></div></div>
+
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="The Vault home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M5 9.5 16 4l11 5.5v13L16 28 5 22.5v-13Z" stroke="currentColor" stroke-width="1.5"/><path d="M10 12h12v8H10zM16 12v8m-6-4h12" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
+        </span>
+        <span class="brand-type">THE <b>VAULT</b><small>CREW NETWORK // 04</small></span>
+      </a>
+
+      <div class="topbar-center"><span class="live-dot"></span> SECURE CHANNEL <span class="divider">/</span> LOBBY 07</div>
+
+      <div class="topbar-actions">
+        <span class="connection" id="topConnection"><span class="connection-dot"></span> LINK STABLE</span>
+        <button class="icon-button audio-toggle" id="audioToggle" type="button" aria-pressed="true" aria-label="Mute sound" title="Mute sound">
+          <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 4a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg>
+          <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="top" class="page-shell">
+      <section class="intro-row" aria-labelledby="page-title">
+        <div>
+          <div class="eyebrow"><span>OPERATION 01</span><i></i> PRE-MISSION BRIEFING</div>
+          <h1 id="page-title">THE <span>VAULT</span></h1>
+          <p class="intro-copy">One crew. Three roles. One shot at the impossible.</p>
+        </div>
+        <button class="text-button" id="howToPlay" type="button">
+          <span class="help-icon" aria-hidden="true">?</span> HOW TO PLAY <span class="arrow">↗</span>
+        </button>
+      </section>
+
+      <section class="room-console panel" id="roomConsole" aria-label="Room connection">
+        <div class="room-connect-fields" id="roomConnectFields">
+          <label class="field-label" for="callsignInput">CALLSIGN<input id="callsignInput" maxlength="18" autocomplete="nickname" placeholder="e.g. Ghost" /></label>
+          <button class="secondary-button" id="createRoom" type="button">CREATE ROOM <span>+</span></button>
+          <span class="room-or">OR JOIN</span>
+          <label class="field-label room-code-field" for="roomCodeInput">ROOM CODE<input id="roomCodeInput" maxlength="6" autocomplete="off" placeholder="6-DIGIT CODE" /></label>
+          <button class="secondary-button" id="joinRoom" type="button">JOIN ROOM <span>→</span></button>
+        </div>
+        <div class="room-connected-fields" id="roomConnectedFields" hidden>
+          <span class="room-connect-indicator"><i></i> <b>CONNECTED TO CREW</b></span>
+          <span class="room-code-display">ROOM <b id="roomCodeDisplay">------</b></span>
+          <span class="room-player-count"><b id="roomPlayerCount">0 / 3</b> OPERATORS</span>
+          <span class="room-mode" id="roomMode">WAITING ROOM</span>
+          <button class="text-button leave-room" id="leaveRoom" type="button">LEAVE ROOM <span>×</span></button>
+        </div>
+        <p class="server-status" id="serverStatus" role="status" aria-live="polite"><i></i> CONNECTING TO VAULT NETWORK…</p>
+      </section>
+
+      <div class="disconnect-banner" id="disconnectBanner" role="alert" aria-live="assertive" hidden>
+        <span class="alert-symbol">!</span><span><b id="disconnectMessage">OPERATOR DISCONNECTED</b><small>MISSION PAUSED · RECONNECT WINDOW <b id="reconnectCountdown">30</b> SEC</small></span>
+      </div>
+
+      <section class="mission-grid" aria-label="Mission briefing">
+        <article class="mission-panel panel">
+          <div class="panel-kicker"><span class="kicker-line"></span> TARGET PROFILE <span class="kicker-index">01 — 03</span></div>
+          <div class="mission-title-row">
+            <div>
+              <p class="micro-label">LOCATION // DOWNTOWN</p>
+              <h2>THE BLACKSITE</h2>
+            </div>
+            <span class="difficulty"><span>◆◆◆</span> HIGH RISK</span>
+          </div>
+          <p class="mission-description">A private security vault beneath the city. Get inside, crack the inner lock, and leave no trace.</p>
+
+          <div class="mission-metrics">
+            <div class="metric"><span class="metric-icon">◷</span><div><small>TIME LEFT</small><b id="timerMetric">--:-- <em>MIN</em></b></div></div>
+            <div class="metric"><span class="metric-icon">◈</span><div><small>TAKE</small><b>$2.4 <em>M</em></b></div></div>
+            <div class="metric"><span class="metric-icon">⌖</span><div><small>LEVEL / GUARDS</small><b id="levelMetric">— <em>—</em></b></div></div>
+          </div>
+
+          <div class="vault-stage" id="vaultStage" aria-label="Illustration of a vault door">
+            <div class="vault-halo"></div>
+            <div class="vault-door" id="vaultDoor">
+              <div class="vault-door-rim"><div class="vault-face">
+                <div class="vault-spokes" aria-hidden="true"></div>
+                <div class="vault-lock"><span></span><i></i></div>
+                <div class="vault-bolt bolt-one"></div><div class="vault-bolt bolt-two"></div><div class="vault-bolt bolt-three"></div><div class="vault-bolt bolt-four"></div>
+                <div class="door-label">VAULT<br /><small>04</small></div>
+              </div></div>
+            </div>
+            <div class="stage-readout readout-left"><span>PRESSURE</span><b>0.00 <small>BAR</small></b></div>
+            <div class="stage-readout readout-right"><span>LOCK STATE</span><b id="lockState">SEALED</b></div>
+            <div class="floor-glow"></div>
+            <div class="stage-caption"><span class="live-dot"></span> LIVE CAM FEED <span class="stage-time">CAM-04 // 01:42:18</span></div>
+          </div>
+
+          <section class="game-console" id="gameConsole" aria-label="Heist controls" hidden>
+            <div class="level-track" aria-label="Heist level progress">
+              <div class="level-step is-current" data-level-step="1"><span>01</span><div><b>THE ENTRY</b><small>1 GUARD · EASY CODE</small></div></div>
+              <i></i>
+              <div class="level-step" data-level-step="2"><span>02</span><div><b>INNER VAULT</b><small>3 GUARDS · FAST TIMER</small></div></div>
+              <i></i>
+              <div class="level-step" data-level-step="3"><span>03</span><div><b>THE CORE</b><small>5 GUARDS · SHIFTING CODE</small></div></div>
+            </div>
+            <div class="game-phase-row"><span class="phase-label" id="phaseLabel">HACKER ACTION</span><span class="phase-instruction" id="phaseInstruction">Solve the signal to disable the lock.</span></div>
+            <div class="action-controls" id="hackControls">
+              <div class="code-prompt"><small>DECRYPT THE SIGNAL</small><b id="puzzleHint">— + — = ?</b><span id="codeRotationHint"></span></div>
+              <form class="code-form" id="codeForm"><label class="sr-only" for="codeInput">Enter the access code</label><input id="codeInput" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="CODE" /><button class="primary-button action-button" type="submit"><span>SUBMIT CODE</span><span class="button-arrow">→</span></button></form>
+              <button class="overload-button" id="systemOverload" type="button"><span>⚡ SYSTEM OVERLOAD</span><small id="overloadCharges">3 CHARGES</small></button>
+            </div>
+            <div class="action-controls action-single" id="lookoutControls" hidden><p>Check the patrol tracker. Call the route clear only when no guard is nearby.</p><button class="primary-button action-button" id="callClear" type="button"><span>CALL “CLEAR”</span><span class="button-arrow">→</span></button></div>
+            <div class="action-controls action-single" id="muscleControls" hidden><p>Hold position until the Lookout calls CLEAR, then breach the door.</p><button class="primary-button action-button breach-button" id="breachDoor" type="button"><span>BREACH VAULT</span><span class="button-arrow">→</span></button></div>
+            <p class="game-feedback" id="gameFeedback" role="status" aria-live="polite"></p>
+            <section class="quick-comms" id="quickComms" aria-label="Quick chat">
+              <div class="quick-comms-heading"><span>QUICK COMMS</span><small>VOICE OPTIONAL · CREW ONLY</small></div>
+              <div class="chat-feed" id="chatFeed" role="log" aria-live="polite" aria-relevant="additions"><span class="chat-empty">NO CALLOUTS YET — SEND A QUICK SIGNAL</span></div>
+              <div class="quick-chat-buttons">
+                <button type="button" data-chat="clear">CLEAR!</button>
+                <button type="button" data-chat="wait">WAIT!</button>
+                <button type="button" data-chat="help">HELP!</button>
+              </div>
+            </section>
+          </section>
+
+          <div class="mission-footer">
+            <div class="crew-progress"><span class="crew-count" id="crewCount">00</span><div><b id="crewReadyLabel">NO ROOM</b><small id="crewReadyDetail">CREATE OR JOIN TO BRIEF</small></div></div>
+            <button class="primary-button" id="startMission" type="button" disabled><span>BEGIN OPERATION</span><span class="button-arrow">→</span></button>
+          </div>
+          <p class="mission-feedback" id="missionFeedback" role="status" aria-live="polite"></p>
+        </article>
+
+        <aside class="side-column">
+          <section class="crew-panel panel" aria-labelledby="crew-heading">
+            <div class="panel-kicker"><span class="kicker-line"></span> YOUR CREW <span class="kicker-index" id="roomIdInRoster">NO ROOM</span></div>
+            <div class="section-heading"><h2 id="crew-heading">TEAM ROSTER</h2><button class="rotate-button" id="rotateRoles" type="button" disabled>↻ ROTATE ROLES</button></div>
+
+            <div class="role-list" role="group" aria-label="Choose an operator role">
+              <button class="role-card" type="button" data-role="hacker" aria-pressed="false">
+                <span class="role-avatar hacker-avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8 4 12l4 4m8-8 4 4-4 4m-2-11-4 14"/></svg></span>
+                <span class="role-copy"><b>OPEN SLOT</b><small>HACKER</small></span>
+                <span class="role-presence">OPEN</span>
+                <span class="selected-mark">✓</span>
+              </button>
+              <button class="role-card" type="button" data-role="muscle" aria-pressed="false">
+                <span class="role-avatar muscle-avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14c2-1 2-4 3-6 1-2 3-1 3 1v2l2-1c2-1 3 1 2 3l-2 5H9l-2-4Zm2 4v2m7-2v2"/></svg></span>
+                <span class="role-copy"><b>OPEN SLOT</b><small>MUSCLE</small></span>
+                <span class="role-presence">OPEN</span>
+                <span class="selected-mark">✓</span>
+              </button>
+              <button class="role-card" type="button" data-role="lookout" aria-pressed="false">
+                <span class="role-avatar lookout-avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+                <span class="role-copy"><b>OPEN SLOT</b><small>LOOKOUT</small></span>
+                <span class="role-presence">OPEN</span>
+                <span class="selected-mark">✓</span>
+              </button>
+            </div>
+
+            <div class="role-guidance" id="roleGuidance" aria-live="polite">
+              <span class="guidance-icon" aria-hidden="true">⌁</span>
+              <div><small>YOUR OBJECTIVE // HACKER</small><p id="guidanceText">Break into the security network and disable the vault lock before the timer runs out.</p></div>
+            </div>
+            <button class="how-inline" type="button" id="howToPlayInline">ROLE DETAILS <span>↗</span></button>
+          </section>
+
+          <section class="intel-panel panel" aria-labelledby="intel-heading">
+            <div class="panel-kicker"><span class="kicker-line"></span> FIELD INTEL <span class="kicker-index">LIVE</span></div>
+            <div class="intel-heading-row"><h2 id="intel-heading">PATROL TRACKER</h2><span class="signal-bars" aria-label="Signal strength: strong"><i></i><i></i><i></i><i></i></span></div>
+            <div class="patrol-map" aria-label="Simplified patrol radar">
+              <div class="radar-ring ring-one"></div><div class="radar-ring ring-two"></div><div class="radar-ring ring-three"></div>
+              <div class="radar-sweep"></div><span class="radar-center"></span><span class="patrol-blip blip-one"></span><span class="patrol-blip blip-two"></span>
+              <span class="radar-label label-a">NORTH WING</span><span class="radar-label label-b">YOU</span>
+            </div>
+            <div class="patrol-status" id="patrolStatus"><span class="status-pip"></span><span id="patrolStatusText">PATROL: ROUTINE</span><span class="patrol-timer">NEXT SWEEP <b>00:18</b></span></div>
+            <div class="intel-bottom"><span><b>03</b> CAMERAS ACTIVE</span><button type="button" id="guardDemo" class="guard-demo">SIMULATE GUARD <span>↗</span></button></div>
+          </section>
+
+          <section class="leaderboard-panel panel" aria-labelledby="leaderboard-heading">
+            <div class="panel-kicker"><span class="kicker-line"></span> GLOBAL RECORDS <span class="kicker-index">TOP 05</span></div>
+            <div class="leaderboard-title-row"><h2 id="leaderboard-heading">FASTEST HEISTS</h2><span class="leaderboard-trophy" aria-hidden="true">✦</span></div>
+            <ol class="leaderboard-list" id="leaderboardList" aria-live="polite"><li class="leaderboard-empty">LOADING GLOBAL RECORDS…</li></ol>
+            <div class="leaderboard-foot"><span>ALL LEVELS · SUCCESSFUL RUNS</span><span>VAULT NETWORK</span></div>
+          </section>
+        </aside>
+      </section>
+
+      <footer class="page-footer"><span>VAULT SYSTEMS <b>© 2025</b></span><span>ENCRYPTION <b>AES-256</b> <i></i> CONNECTION <b>SECURE</b></span><span>BUILD <b>0.9.4 — RC</b></span></footer>
+    </main>
+
+    <div class="modal-backdrop" id="howModal" aria-hidden="true">
+      <section class="how-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalIntro">
+        <button class="modal-close icon-button" id="closeModal" type="button" aria-label="Close how to play">×</button>
+        <div class="eyebrow"><span>FIELD MANUAL</span><i></i> OPERATION 01</div>
+        <h2 id="modalTitle">THREE ROLES.<br /><span>ONE PERFECT HEIST.</span></h2>
+        <p class="modal-intro" id="modalIntro">Work together and watch the timing. Each operator has one job, and every callout matters.</p>
+        <div class="modal-roles">
+          <article class="modal-role"><span class="modal-role-icon hacker-avatar">⌘</span><div><div class="modal-role-head"><h3>HACKER</h3><span>GHOST</span></div><p>Get into the security network. Solve the access sequence to disable cameras and unlock the vault.</p><small>CALL OUT WHEN THE LOCK IS DISABLED.</small></div></article>
+          <article class="modal-role"><span class="modal-role-icon muscle-avatar">✳</span><div><div class="modal-role-head"><h3>MUSCLE</h3><span>BRICK</span></div><p>Get into position at the vault door. Wait for the Lookout to say <b>“CLEAR”</b>, then breach on their signal.</p><small>NEVER BREACH WHILE A GUARD IS NEAR.</small></div></article>
+          <article class="modal-role"><span class="modal-role-icon lookout-avatar">◎</span><div><div class="modal-role-head"><h3>LOOKOUT</h3><span>ORACLE</span></div><p>Watch patrol routes and cameras. Call <b>“CLEAR”</b> only when the route is safe, then warn your crew when guards move.</p><small>YOUR CALLOUT SETS THE CREW'S TIMING.</small></div></article>
+        </div>
+        <div class="modal-tip"><span>✦</span><p><b>CREW RULE:</b> Hacker disables security → Lookout confirms the route is clear → Muscle breaches the door.</p></div>
+        <button class="primary-button modal-done" id="modalDone" type="button"><span>GOT IT, LET'S BRIEF</span><span class="button-arrow">→</span></button>
+      </section>
+    </div>
+
+    <div class="modal-backdrop result-backdrop" id="resultModal" aria-hidden="true">
+      <section class="how-modal result-modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+        <button class="modal-close icon-button" id="closeResult" type="button" aria-label="Close results">×</button>
+        <div class="eyebrow"><span id="resultKicker">MISSION REPORT</span><i></i> AFTER ACTION</div>
+        <h2 id="resultTitle">HEIST <span id="resultOutcome">COMPLETE</span></h2>
+        <p class="modal-intro" id="resultReason">The crew made it out with the take.</p>
+        <div class="result-stats">
+          <div><small>TIME TAKEN</small><b id="statTime">00:00</b></div>
+          <div><small>WRONG BUTTONS</small><b id="statWrong">0</b></div>
+          <div><small>GUARD SIGHTINGS</small><b id="statSpotted">0</b></div>
+          <div><small>LEVEL REACHED</small><b id="statLevel">1 / 3</b></div>
+        </div>
+        <button class="primary-button modal-done" id="closeResultDone" type="button"><span>RETURN TO BRIEFING</span><span class="button-arrow">→</span></button>
+      </section>
+    </div>
+
+    <div class="guard-alert" id="guardAlert" role="alert" aria-live="assertive"><span class="alert-symbol">!</span><span><b>GUARD NEARBY</b><small>HOLD POSITION · WAIT FOR CLEAR</small></span><span class="alert-signal"></span></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
